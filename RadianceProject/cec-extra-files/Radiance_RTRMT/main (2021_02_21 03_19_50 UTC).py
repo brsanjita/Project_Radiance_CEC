@@ -1,3 +1,8 @@
+"""
+Copyright © Prof. Anurag Srivastava, Gowtham Kandaperumal, Linli Jia, and Dr. Sanjeev Pannala.
+No image or information should be reproduced, transmitted, or copied without the prior agreement with Prof. Srivastava.
+"""
+
 import csv
 import numpy as np
 from collections import defaultdict

@@ -1,4 +1,10 @@
+"""
+Copyright © Prof. Anurag Srivastava, Gowtham Kandaperumal, Linli Jia, and Dr. Sanjeev Pannala.
+No image or information should be reproduced, transmitted, or copied without the prior agreement with Prof. Srivastava.
+"""
+
 # -*- coding: utf-8 -*-
+
 """
 Created on Tue Jan 19 18:09:47 2021
 
@@ -6,6 +12,7 @@ Created on Tue Jan 19 18:09:47 2021
 args:
     description:
 """
+
 
 import csv
 import numpy as np
