@@ -1,3 +1,4 @@
+
 <!--
 Copyright © Prof. Anurag Srivastava, Gowtham Kandaperumal, Linli Jia, and Dr. Sanjeev Pannala.
 No image or information should be reproduced, transmitted, or copied without the prior agreement with Prof. Srivastava.
@@ -41,7 +42,348 @@ No image or information should be reproduced, transmitted, or copied without the
       <!-- DataTables-->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">  
    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+   <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/b-1.7.1/datatables.min.css"/>
+   <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/b-1.7.1/datatables.min.js"></script>
+   <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"/>
+   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css"/>
+   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css">
 
+   <!--real time alert tables-->
+   <script>
+      function fieldformat(value1, value2, value3, value4) {
+         if (value1 == 'Street Name: ') {
+            return '<table>'+
+               '<tr>'+
+                  '<td style="width: 67px;"></td>'+
+                  '<td>'+value1+'</td>'+
+                  '<td>'+value2+'</td>'+
+                  '<td></td>'+
+                  '<td class="test">'+
+                     '<button class="outageStatus" title="Repair work in progress"></button>'+
+                  '</td>'+
+               '</tr>'+
+               '<tr>'+
+                  '<td></td>'+
+                  '<td>'+value3+'</td>'+
+                  '<td>'+value4+'</td>'+
+                  '<td></td>'+
+                  '<td></td>'+
+               '</tr>'+
+            '</table>';
+         } 
+         if (value1 == 'Base Station') {
+            return '<table>'+
+               '<tr>'+
+                  '<td style="width: 67px;"></td>'+
+                  '<td>'+value1+'/'+value2+'</td>'+
+                  '<td>&#8594;</td>'+
+                  '<td>'+value3+'</td>'+
+                  '<td>&#8594;</td>'+
+                  '<td>'+value4+'</td>'+
+               '</tr>'+
+            '</table>';  
+         } else {
+            return '<table>'+
+               '<tr>'+
+                  '<td style="width: 67px;"></td>'+
+                  '<td>'+value1+'</td>' +
+                  '<td>'+value2 +'</td>'+
+               '</tr>'+
+               '<tr>'+
+                  '<td></td>'+
+                  '<td>'+value3+' </td>'+
+                  '<td>'+value4+'</td>'+
+               '</tr>'+
+            '</table>';
+         }
+      }
+
+      function operatorformat(value1, value2, value3, value4) {
+         return '<table>'+
+            '<tr>'+
+               '<td style="width: 78px;"></td>'+
+               '<td>'+value1+'</td>'+
+               '<td>'+value2+'</td>'+
+            '</tr>'+
+            '<tr>'+
+               '<td></td>'+
+               '<td>'+value3+'</td>'+
+               '<td>'+value4+'</td>'+
+            '</tr>'+
+         '</table>';
+      }
+
+      function customerformat(id1, id2, id3, id4, category) {
+         if (id1 == 'Base Station') {
+            return '<table>'+
+               '<tr>'+
+                  '<td style="width: 78px;"></td>'+
+                  '<td>'+id1+'/'+id2+'</td>'+
+                  '<td>&#8594;</td>'+
+                  '<td>'+id3+'</td>'+
+                  '<td>&#8594;</td>'+
+                  '<td>'+id4+'</td>'+
+               '</tr>'+
+            '</table>';  
+         } else {
+            return '<table>'+
+               '<tr>'+
+                  '<td style="width: 78px;"></td>'+
+                  '<td>'+
+                        '<input type="radio" value="button1" id="'+id1+'" name="'+category+'"'+
+                        '<span class="checkmark"></span>'+
+                        '<label class="alertcontainer" for="'+id1+'">'+id1+'</label>'+
+                  '</td>'+
+               '</tr>'+
+               '<tr>'+
+                  '<td></td>'+
+                  '<td>'+
+                        '<input type="radio" value="button1" id="'+id2+'" name="'+category+'"'+
+                        '<span class="checkmark"></span>'+
+                        '<label class="alertcontainer" for="'+id2+'">'+id2+'</label>'+
+                  '</td>'+
+               '</tr>'+
+               '<tr>'+
+                  '<td></td>'+
+                  '<td>'+
+                        '<input type="radio" value="button1" id="'+id3+'" name="'+category+'"'+
+                        '<span class="checkmark"></span>'+
+                        '<label class="alertcontainer" for="'+id3+'">'+id3+'</label>'+
+                  '</td>'+
+               '</tr>'+
+               '<tr>'+
+                  '<td></td>'+
+                  '<td>'+
+                        '<input type="radio" value="button1" id="'+id4+'" name="'+category+'"'+
+                        '<span class="checkmark"></span>'+
+                        '<label class="alertcontainer" for="'+id4+'">'+id4+'</label>'+
+                  '</td>'+
+               '</tr>'+
+            '</table>'; 
+         }
+      }
+      
+      //operator alert table
+      $(document).ready(function () {
+         var table = $('#operatoralert').DataTable({
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "scrollX": true, 
+            scrollX: "100%"
+         });
+         //table.columns.adjust();
+         $('#operatoralert').DataTable().draw();
+         /*
+         // Add event listener for opening and closing details
+         $('#operatoralert tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                  // This row is already open - close it
+                  row.child.hide();
+                  tr.removeClass('shown');
+            } else {
+                  // Open this row
+                  row.child(operatorformat(tr.data('child-value-1'), tr.data('child-value-2'), tr.data('child-value-3'), tr.data('child-value-4'))).show();
+                  //$( '#info' ).DataTable();
+                  tr.addClass('shown');
+            }
+         });*/
+      });
+
+      //alert field crew
+      $(document).ready(function () {
+         var table = $('#fieldcrew').DataTable({
+            "paging": false,
+            "ordering": false,
+            "info": false, 
+            "scrollX": true
+         });
+         /*
+         // Add event listener for opening and closing details
+         $('#fieldcrew tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                  // This row is already open - close it
+                  row.child.hide();
+                  tr.removeClass('shown');
+            } else {
+                  // Open this row
+                  row.child(fieldformat(tr.data('child-value-1'), tr.data('child-value-2'), tr.data('child-value-3'), tr.data('child-value-4'))).show();
+                  tr.addClass('shown');
+            }
+         });*/
+      });
+
+      //customer alert
+      $(document).ready(function () {
+         var table = $('#alertcustomer').DataTable({
+            "paging": false,
+            "ordering": false,
+            "info": false
+         });
+
+         // Add event listener for opening and closing details
+         $('#alertcustomer tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                  // This row is already open - close it
+                  row.child.hide();
+                  tr.removeClass('shown');
+            } else {
+                  // Open this row
+                  row.child(customerformat(tr.data('child-value-1'), tr.data('child-value-2'), tr.data('child-value-3'), tr.data('child-value-4'), tr.data('child-value-5'))).show();
+                  tr.addClass('shown');
+            }
+         });
+      });
+   </script>
+   <style>
+      @import url('//cdn.datatables.net/1.10.2/css/jquery.dataTables.css');
+      td.details-control {
+          background: url('http://www.datatables.net/examples/resources/details_open.png') no-repeat center center;
+          cursor: pointer;
+        }
+      tr.shown td.details-control {
+          background: url('http://www.datatables.net/examples/resources/details_close.png') no-repeat center center;
+        }
+      .outageStatus:hover{
+         border: 1px solid rgb(216, 142, 3);
+         background-color: rgb(194, 161, 12);
+         }
+      .outageStatus{
+         border: none;
+         width: 15px;
+         height: 15px;
+         background-color: rgb(255, 208, 0);
+         transition: all ease-in-out 0.2s;
+         cursor: pointer;
+         border-radius: 50%;
+      }
+      .container {
+         display: block;
+         position: relative; 
+      }
+      .checkmark {
+         background-color: #075053;
+      }
+      .outageinfo {
+         white-space: nowrap;
+         text-align: center;
+      }
+      #outagenumber {
+         background-color: #075053;
+      }
+    </style>
+   <style>
+      html, body {
+         height: 100%;
+      }
+   </style>
+   <!--smtp email-->
+   <script type="text/javascript" src="https://smtpjs.com/v3/smtp.js"></script>
+   <script>
+   function updateEmailBody() {
+     //collect selected radio button values
+      var threats = document.getElementsByName('threat');
+      var selectedThreat; 
+      for (i = 0; i < threats.length; i++) {
+         if (threats[i].checked) {
+            selectedThreat = threats[i].id.toLowerCase(); 
+         }
+      }
+      var outages = document.getElementsByName('outage'); 
+      var selectedOutageDuration; 
+      for (i = 0; i < outages.length; i++) {
+         if (outages[i].checked) {
+            selectedOutageDuration = outages[i].id; 
+         }
+      }
+      var repairs = document.getElementsByName('repair');
+      var selectedRepairTime; 
+      for (i = 0; i < repairs.length; i++) {
+         if (repairs[i].checked) {
+            selectedRepairTime = repairs[i].id;
+         }
+      } 
+      document.getElementById("emailpreview").value= `Your location is currently experiencing a power outage due to the ${selectedThreat}. The estimated outage duration is ${selectedOutageDuration}. Crews are working to restore power. The estimated restoration period is ${selectedRepairTime}. Thank you for your cooperation. We will keep you updated. `; 
+   }
+   </script>
+   <script>
+   function sendEmail() {
+
+      var emailBody = document.getElementById("emailpreview").value; 
+      Email.send({
+         Host: "smtp.gmail.com",
+         Username: "outagealert987@gmail.com",
+         Password: "OutageAlert987",
+         To : 'suhanishukla05@gmail.com, kaminishukla@gmail.com',
+         From: "outagealert987@gmail.com", 
+         Subject: "Power Outage Alert",
+         Body: `${emailBody}`, 
+      })
+   .then(function(message){
+      alert("Mail Sent Successfully!")
+      });
+   }
+   </script>
+
+   <!--real time tab: style sms and email buttons-->
+   <style>
+      .realtimebutton {
+         text-align: center;
+         align-items: center;
+      }
+      #sendemail {
+         margin-top: 16px; 
+      }
+      .sms {
+         background-color: #075053;
+         color: white; 
+         border-radius: 4px;
+      }
+      .sms:hover {
+         background-color: #093234;
+      }
+      .email {
+         background-color:#075053;
+         color: white; 
+         border-radius: 4px;
+      }
+      .email:hover {
+         background-color: #093234;
+      }
+      .showmark {
+         background-color: #075053;
+         color: white; 
+         border-radius: 4px;
+      }
+      .showmark:hover {
+         background-color: #093234;
+      }
+   </style>
+
+   <style>
+      /*alert customer radio buttons*/
+      input[type=radio] {
+         background-color: #075053;
+      }
+      /*email preview*/
+      .emailpreview {
+         width: 700px; 
+         height: 226px; 
+         /*font-size: 18px;*/
+         padding-top: 10px;
+         padding-right: 10px;
+         padding-left: 10px;
+      }
+   </style>
    <link rel="stylesheet" type="text/css" href="leaflet-openweathermap.css" />
 	<script type="text/javascript" src="leaflet-openweathermap.js"></script>
 
@@ -53,7 +395,7 @@ No image or information should be reproduced, transmitted, or copied without the
 
    <div class="container-fluid">
       <div class="row tooltitle justify-content-center">
-          <h2 style=" color: white; font-weight: bolder; "> REAL-TIME RESILIENCY MANAGEMENT SYSTEM (CEC ALASKA)</h2>
+          <h2 style=" color: white; font-weight: bolder; "> REAL-TIME RESILIENCY MONITORING AND OPERATIONAL SUPPORT </h2>
       </div>
   </div>
 
@@ -127,7 +469,7 @@ No image or information should be reproduced, transmitted, or copied without the
                   <li class="nav-item "><a class="nav-link active" data-toggle="tab" href="#system-info">System Information</a></li>
                   <li class="nav-item"><a class="nav-link " data-toggle="tab" href="#Real-Time">Resiliency Monitoring</a></li>
                   <li class="nav-item"><a class="nav-link " data-toggle="tab" href="#decision">Decision Support</a></li>
-                  <li class="nav-item"><a class="nav-link " data-toggle="tab" href="#planning">Planning and Analysis</a>
+                  <li class="nav-item"><a class="nav-link " data-toggle="tab" href="#planning">Real-Time Alert and Monitoring of Service Area</a>
                   </li>
                </ul>
 
@@ -1485,7 +1827,6 @@ No image or information should be reproduced, transmitted, or copied without the
                                                 <td>Battery SOC</td>
                                                 <td>85%</td>
                                              </tr>
-
                                              <tr>
                                                 <td>Available battery energy</td>
                                                 <td>500 kW</td>
@@ -1495,7 +1836,6 @@ No image or information should be reproduced, transmitted, or copied without the
                                                 <td>Non-spinning reserve</td>
                                                 <td>5 Units at ORCA</td>
                                              </tr>
-
                                              <tr>
                                                 <td>Available generation</td>
                                                 <td>1.0 MW</td>
@@ -1528,7 +1868,6 @@ No image or information should be reproduced, transmitted, or copied without the
                                              <td>Number of crew</td>
                                              <td>10</td>
                                           </tr>
-
                                           <tr>
                                              <td>Back up generators </td>
                                              <td>5 Units at ORCA</td>
@@ -1538,12 +1877,10 @@ No image or information should be reproduced, transmitted, or copied without the
                                              <td>Spare transformers available</td>
                                              <td>10</td>
                                           </tr>
-
                                           <tr>
                                              <td>Spare oil switches</td>
                                              <td>2</td>
                                           </tr>
-
                                           <tr>
                                              <td>Available fuel at ORCA</td>
                                              <td>60 %</td>
@@ -1869,74 +2206,370 @@ No image or information should be reproduced, transmitted, or copied without the
                   </div>
 
                  <!-- Planning Button -->
-                  <div id="planning" class="tab-pane in notika-tab-menu-bg">
-                     <ul class="nav nav-tabs">
-                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#planning-pre">Pre-Event</a></li>
-                        <!-- <li><a data-toggle="tab" href="#planning-during">During Event</a></li> -->
-                        <!-- <li><a data-toggle="tab" href="#planning-post">Post-Event</a></li> -->
+                  <!--<div id="planning" class="tab-pane in notika-tab-menu-bg">-->
+                  <div id="planning" class="tab-pane">
+                     <ul class="mainnavbar nav nav-tabs">
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#operator-alert">Outage Information</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#fieldcrew-alert">Alert Field Crew</a></li> 
+                        <!--<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#customer-alert">Customer Alert</a></li> -->
                      </ul>
                      <div class="tab-content">
-                        <!-- Planning Pre-event -->
-                        <div id="planning-pre" class="tab-pane active">
+
+                        <!-- General alert info -->
+                        <div id="operator-alert" class="tab-pane active">
                            <div class="container-fluid">
-                              <!-- <div class="row"> -->
                               <div class="row">
-                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                    <h3 style="text-align: center; padding-top: 15px;">Proactive Decision</h3>
-                                    <div class="card2">
-                                       <table class="table table-bordered table-sm">
+                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                    <div class="col-md-12 d-flex">
+                                       <h4 style="text-align: left; padding-top: 15px; padding-left: 15px;">Active Outages: </h4>
+                                       <button type="button" id="outagenumber" class="btn btn-primary btn-lg" style="margin-left: 10px;">5</button>
+                                    </div>
+                                    <div class="card2" style="height: 305px;">
+                                       <table id="operatoralert" class="table table-striped table-bordered">
+                                          <thead>
+                                             <tr class="outageinfo">
+                                                <th>Sr. No.</th>
+                                                <th>Outage Location</th>
+                                                <th>Affected Customers</th>
+                                                <th>Damage Information</th>
+                                                <th>Status</th>
+                                                <th>Estimated Restoration (hours)</th>
+                                                <th>Live Mark</th>
+                                                <th>Customer Alert</th>
+                                             </tr>
+                                          </thead>
                                           <tbody>
-                                             <tr>
-                                                <td>Fault Location</td>
-                                                <td>ORCA, New Town</td>
+                                             <tr class="outageinfo">
+                                                <td>1</td>
+                                                <td>Nelson St.</td>
+                                                <td>60</td>
+                                                <td>Line Outage</td>
+                                                <td>Under Maintenance</td>
+                                                <td>5</td>
+                                                <td>
+                                                   <div class="realtimebutton"> 
+                                                      <input type="button" class="showmark" value="Show">
+                                                   </div>
+                                                </td>
+                                                <td>
+                                                   <div class="realtimebutton">
+                                                      <form method="post">
+                                                         <input type="button" class="email" value="Send Email" onclick="sendEmail()"/>
+                                                      </form>
+                                                   </div>
+                                                </td>
                                              </tr>
-
-                                             <tr>
-                                                <td>Isolated Section details</td>
-                                                <td>ORCA, New Town</td>
+                                             <tr class="outageinfo">
+                                                <td>2</td>
+                                                <td>Larry Street</td>
+                                                <td>100</td>
+                                                <td>Transformer Failure</td>
+                                                <td>Replacement Under Progress</td>
+                                                <td>10</td>
+                                                <td>
+                                                   <div class="realtimebutton"> 
+                                                      <input type="button" class="showmark" value="Show">
+                                                   </div>
+                                                </td>
+                                                <td>
+                                                   <div class="realtimebutton">
+                                                      <form method="post">
+                                                         <input type="button" class="email" value="Send Email" onclick="sendEmail()"/>
+                                                      </form>
+                                                   </div>
+                                                </td>
                                              </tr>
-
+                                       </table>
+                                       <!--<table id="operatoralert" class="realtime">
+                                          <thead>
                                              <tr>
-                                                <td>Inventory Available</td>
-                                                <td>10 Crew Members, 2 Generators</td>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
                                              </tr>
-
-                                             <tr>
-                                                <td>Pre-planned actions</td>
-                                                <td>30 Crew Members, 4 Auxiliary Transformers</td>
+                                          </thead>
+                                          <tbody>
+                                             <tr data-child-value-1="Unit Type: " data-child-value-2="Feeder-transformers" data-child-value-3="Location: " data-child-value-4="Stadium Way">
+                                                <td class="details-control" style="width: 20px;"></td>
+                                                <td><strong>System Information</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
                                              </tr>
-
-                                             <tr>
-                                                <td>Addition of storage at Eyak</td>
-                                                <td>500 kWh</td>
+                                             <tr data-child-value-1="Street Name: " data-child-value-2="Nelson St." data-child-value-3="Feeder ID: " data-child-value-4="F1">
+                                                <td class="details-control"></td>
+                                                <td><strong>Outage Zone</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                             </tr>
+                                             <tr data-child-value-1="Total No. of Customers: " data-child-value-2="4500" data-child-value-3="Feeder F1: " data-child-value-4="500">
+                                                <td class="details-control"></td>
+                                                <td><strong>Customers Affected</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                             </tr>
+                                             <tr data-child-value-1="Unit Type: " data-child-value-2="Feeder-transfomers" data-child-value-3="Location: " data-child-value-4="Stadium Way">
+                                                <td class="details-control"></td>
+                                                <td><strong>Damage Information</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
                                              </tr>
                                           </tbody>
-
-                                       </table>
+                                          <tfoot>
+                                             <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                             </tr>
+                                          </tfoot>
+                                       </table>-->
                                     </div>
 
-                                    <h3 style="text-align: center;">Resiliency Score Chart</h3>
-                                    <div style="background: #f9f9f9; ">
-                                       <canvas id="planning-pre-barchart"></canvas>
+                                    
+                                 </div>
+                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                    <h3 style="text-align: center; padding-top: 15px;">Live Map</h3>
+                                    <div class="card2" style="height: 700px;">
+                                       <iframe src="https://public.tableau.com/views/RTRMOD/Sheet1?:language=en-US&:display_count=n&:origin=viz_share_link&:showVizHome=no&:embed=true" height="700" width="700"></iframe>
                                     </div>
-
-
                                  </div>
-                              
-
-                              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                 <h3 style="text-align: center; padding-top: 15px;">Live Map</h3>
-                                 <div class="card2">
-                                    <!-- insert Bar graphs   -->
-                                    <div id="planning-pre-map"></div>
-                                 </div>
+                  
                               </div>
                            </div>
+                        </div>
+                        
+                        <!--Field Crew Alert-->
+                        <div id="fieldcrew-alert" class="tab-pane fade">
+                           <div class="container-fluid">
+                              <div class="row">
+                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <h3 style="text-align: center; padding-top: 15px;">Alert Field Crew</h3>
+                                    <div class="card2" style="height: 305px;">
+                                       <table id="fieldcrew" class="table table-striped table-bordered">
+                                          <thead>
+                                             <tr class="outageinfo">
+                                                <th>Outage Date & Time</th>
+                                                <th>Outage Location</th>
+                                                <th>Feeder ID</th>
+                                                <th>Affected Customers</th>
+                                                <th>Damage Information</th>
+                                                <th>Required Workforce</th>
+                                                <th>Live Mark</th>
+                                             </tr>
+                                          </thead>
+                                          <tbody>
+                                             <tr class="outageinfo">
+                                                <td>09/02/2021 - 13:47</td>
+                                                <td>Nelson St.</td>
+                                                <td>Nel_F12</td>
+                                                <td>60</td>
+                                                <td>Line Outage</td>
+                                                <td>5</td>
+                                                <td>
+                                                   <div class="realtimebutton"> 
+                                                      <input type="button" class="showmark" value="Show">
+                                                   </div>
+                                                </td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <!--<table id="fieldcrew" class="realtime">
+                                          <thead>
+                                             <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                             </tr>
+                                          </thead>
+                                          <tbody>
+                                             <tr data-child-value-1="Street Name: " data-child-value-2="Nelson St." data-child-value-3="Feeder ID: " data-child-value-4="F1">
+                                                <td class="details-control"></td>
+                                                <td><strong>Outage Zone</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                             </tr>
+                                             <tr data-child-value-1="Total No. of Customers: " data-child-value-2="4500" data-child-value-3="Feeder F1: " data-child-value-4="500">
+                                                <td class="details-control"></td>
+                                                <td><strong>Customers Affected</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                             </tr>
+                                             <tr data-child-value-1="Unit Type: " data-child-value-2="Feeder-transfomers" data-child-value-3="Location: " data-child-value-4="Stadium Way">
+                                                <td class="details-control"></td>
+                                                <td><strong>Damage Information</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                             </tr>
+                                             <tr data-child-value-1="Base Station" data-child-value-2="Crew Station" data-child-value-3="Nelson St." data-child-value-4="Orcas St.">
+                                                <td class="details-control"></td>
+                                                <td><strong>Crew Routing</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                             </tr>
+                                          </tbody>
+                                          <tfoot>
+                                             <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                             </tr>
+                                          </tfoot>
+                                       </table>
+                                       <div class="realtimebutton">
+                                          <button class="sms"><a href="sms:+15103090802&body=This%20is%20a%20default%20alert%20message." style="color: white;">Send SMS</a></button>
+                                       </div>-->
+                                    </div>
+                                 </div>
+
+                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <h3 style="text-align: center; padding-top: 15px;">Live Map</h3>
+                                    <div class="card2" style="height: 700px;">
+                                       <iframe src="https://public.tableau.com/views/RTRMOD/Sheet1?:language=en-US&:display_count=n&:origin=viz_share_link&:showVizHome=no&:embed=true" height="650" width="700"></iframe>
+                                       <!--<div class='tableauPlaceholder' id='viz1629246326421' style='position: relative'>
+                                          <noscript>
+                                             <a href='#'>
+                                                <img alt='Sheet 1 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;RP&#47;RPW9FFJ2J&#47;1_rss.png' style='border: none' />
+                                             </a>
+                                          </noscript>
+                                          <object class='tableauViz'  style='display:none;'>
+                                             <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> 
+                                             <param name='embed_code_version' value='3' /> 
+                                             <param name='path' value='shared&#47;RPW9FFJ2J' /> 
+                                             <param name='toolbar' value='yes' />
+                                             <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;RP&#47;RPW9FFJ2J&#47;1.png' /> 
+                                             <param name='animate_transition' value='yes' />
+                                             <param name='display_static_image' value='yes' />
+                                             <param name='display_spinner' value='yes' />
+                                             <param name='display_overlay' value='yes' />
+                                             <param name='display_count' value='yes' />
+                                             <param name='language' value='en-US' />
+                                             <param name='filter' value='publish=yes' />
+                                          </object>
+                                       </div>                
+                                       <script type='text/javascript'>                    
+                                          var divElement = document.getElementById('viz1629246326421');                    
+                                          var vizElement = divElement.getElementsByTagName('object')[0];                    
+                                          vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    
+                                          var scriptElement = document.createElement('script');                    
+                                          scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    
+                                          vizElement.parentNode.insertBefore(scriptElement, vizElement);                
+                                       </script>-->
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="row">
+                                 <div class="col-lg-1.5 col-md-1.5 col-sm-1.5 col-xs-1.5">
+                                    <div class="card2" style="height: 305px;">
+                                       <h3>dropdown</h3>
+                                    </div>
+                                 </div>
+                                 <div class="col-lg-1.5 col-md-1.5 col-sm-1.5 col-xs-1.5">
+                                    <div class="card2" style="height: 305px;">
+                                       <h3>radio buttons</h3>
+                                    </div>
+                                 </div>
+                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                    <div class="card2" style="height: 305px;">
+                                       <h3>text area</h3>
+                                    </div>
+                                 </div> 
+                              </div>
                            </div>
                         </div>
-
+                        
+                        <!--Customer Alert-->
+                       <!-- <div id="customer-alert" class="tab-pane fade">
+                           <div class="container-fluid">
+                              <div class="row">
+                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <h3 style="text-align: center; padding-top: 15px;">Customer Alert</h3>
+                                    <div class="card2" style="height: 305px;">
+                                       <table id="alertcustomer" class="realtime">
+                                          <thead>
+                                             <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                             </tr>
+                                          </thead>
+                                          <tbody>
+                                             <tr data-child-value-1="Tsunami" data-child-value-2="Storm" data-child-value-3="Earthquake" data-child-value-4="Flood" data-child-value-5="threat">
+                                                <td class="details-control"></td>
+                                                <td><strong>Threat Type</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                             </tr>
+                                             <tr data-child-value-1="4 hours" data-child-value-2="8 hours" data-child-value-3="12 hours" data-child-value-4="24 hours" data-child-value-5="outage">
+                                                <td class="details-control"></td>
+                                                <td><strong>Outage Duration</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                             </tr>
+                                             <tr data-child-value-1="2 hours" data-child-value-2="4 hours" data-child-value-3="6 hours" data-child-value-4="8 hours" data-child-value-5="repair">
+                                                <td class="details-control"></td>
+                                                <td><strong>Est. Repair Time</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                             </tr>
+                                             <tr data-child-value-1="Base Station" data-child-value-2="Crew Center" data-child-value-3="Nelson St." data-child-value-4="Orcas St.">
+                                                <td class="details-control"></td>
+                                                <td><strong>Crew Routing</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                             </tr>
+                                          </tbody>
+                                          <tfoot>
+                                             <tr>
+                                                <th colspan="5"></th>
+                                             </tr>
+                                          </tfoot>
+                                       </table>
+                     
+                                       <div class="realtimebutton">
+                                          <form method="post">
+                                             <input type="button" class="email" value="Generate Preview" onclick="updateEmailBody()"/>
+                                          </form>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                    <h3 style="text-align: center; padding-top: 15px;">Email Preview</h3>
+                                    <div class="card2" style="height: 305px;">
+                                       <textarea id="emailpreview" class="emailpreview"></textarea>
+                                       <div class="realtimebutton">
+                                          <form method="post">
+                                             <input type="button" class="email" value="Send Email" onclick="sendEmail()"/>
+                                          </form>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>   
+                        </div>-->
+                     </div>
                         <!-- Planning During -->
-                        <div id="planning-during" class="tab-pane fade">
+                        <!--<div id="planning-during" class="tab-pane fade">
                            <div class="container-fluid">
                               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                  <div class="row">
@@ -1956,10 +2589,10 @@ No image or information should be reproduced, transmitted, or copied without the
                                                       <ul class="dropdown-menu">
                                                          <li><a href="#">Avalance</a></li>
                                                          <li><a href="#">Tsunami</a></li>
-                                                         <li><a href="#">Tornado</a></li>
+                                                         <li><a href="#">Tornado</a></li>-->
                                                          <!-- <li role="separator" class="divider"></li>
                                                             <li><a href="#">Separated link</a></li> -->
-                                                      </ul>
+                                                     <!-- </ul>
                                                    </div>
                                                 </td>
                                              </tr>
@@ -1975,11 +2608,9 @@ No image or information should be reproduced, transmitted, or copied without the
                                                 <td>Wind Direction</td>
                                                 <td>North-west</td>
                                              </tr>
-
                                           </table>
                                        </div>
                                     </div>
-
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                        <h3 style="text-align: center; padding-top: 15px;">Expected Outage
                                           and Summary
@@ -2012,55 +2643,63 @@ No image or information should be reproduced, transmitted, or copied without the
                                           <canvas id="planning-during-barchart"></canvas>
                                        </div>
                                     </div>
-
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                        <div style="background: #f9f9f9; ">
                                           <canvas id="planning-during-linechart"></canvas>
                                        </div>
                                     </div>
-                                 </div>
+                                 </div>-->
                                  <!-- </div> -->
-                              </div>
+                              <!--</div>-->
                               <!-- </div> -->
                               <!-- <div class="row"> -->
-                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                              <!--<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">-->
                                  <!-- insert Bar graphs   -->
-                                 <h3 style="text-align: center; padding-top: 15px;"> Live Tracking </h3>
+                                <!-- <h3 style="text-align: center; padding-top: 15px;"> Live Tracking </h3>
                                  <div style="background: #f9f9f9; ">
                                     <div id="planning-during-mapid"></div>
                                  </div>
-                              </div>
+                              </div>-->
                               <!-- </div> -->
-                           </div>
-                        </div>
+                          <!-- </div>
+                        </div> -->
 
                         <!-- Planning Post Event -->
-                        <div id="planning-post" class="tab-pane fade">
+                       <!-- <div id="planning-post" class="tab-pane fade">
                            <div class="container-fluid" style="margin-top: 20px; background: #f9f9f9;">
                               <div class="row">
-                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"> -->
                                     <!-- insert line chart   -->
-                                    <p> Insert Line Chart </p>
+                                    <!--<p> Insert Line Chart </p>
                                  </div>
                               </div>
                               <div class="row">
-                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">-->
                                     <!-- insert Bar graphs   -->
-                                    <p> Insert Bar graphs </p>
+                                  <!--  <p> Insert Bar graphs </p>
                                  </div>
                               </div>
                            </div>
                         </div>
-                     </div>
+                     </div>-->
                   </div>
 
-               </div>
+               <!--</div>-->
       
    <!-- </div> -->
-         </div>
+         <!--</div>-->
 
    <!-- main JS
       ============================================ -->
+   
+   <script type='text/javascript'>
+      var divElement = document.getElementById('viz1629246326421');                    
+      var vizElement = divElement.getElementsByTagName('object')[0];                    
+      vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    
+      var scriptElement = document.createElement('script');                    
+      scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    
+      vizElement.parentNode.insertBefore(scriptElement, vizElement);                
+   </script>
    
    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
