@@ -394,6 +394,8 @@ No image or information should be reproduced, transmitted, or copied without the
       alert("Mail Sent Successfully!")
       });
    }
+
+   $('#testmodal').modal(options)
    </script>
 
    <!--real time tab: style sms and email buttons-->
@@ -2315,7 +2317,7 @@ No image or information should be reproduced, transmitted, or copied without the
                                                 </td>
                                                 <td>
                                                    <div class="realtimebutton">
-                                                      <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target="#testModal">Send</button>
+                                                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#testModal">Send</button>
                                                    </div>
                                                 </td>
                                              </tr>
@@ -2542,8 +2544,13 @@ No image or information should be reproduced, transmitted, or copied without the
                                           </div>
                                        </div>
                                     </div>
-                                    <div class="card" style="margin-top: 15px;">
-                                       <textarea class="form-control"></textarea>
+                                    <div class="card h-600" style="margin-top: 15px;">
+                                       <form>
+                                          <div class="form-group">
+                                             <label for="customermessage">Message for Customer</label>
+                                             <textarea class="form-control" id="customermessage" rows="5"></textarea>
+                                          </div>
+                                       </form>
                                     </div>
                                  </div>
 
