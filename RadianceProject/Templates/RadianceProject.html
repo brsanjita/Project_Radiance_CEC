@@ -2423,14 +2423,31 @@ No image or information should be reproduced, transmitted, or copied without the
                                     </div>
                                  </div>
                                  
-                                 <div id="customermodal" class="modal">
+                                 <!--<div id="customermodal" class="modal">
                                     <div class="modal-content">
                                        <span class="close">&times;</span>
                                        <h3>Customer Alert</h3>
                                     </div>
-                                 </div>
+                                 </div>-->
                   
                               </div>
+                              <dialog id="customermodal">
+                                 <form method="dialog">
+                                    <div class="form-group">
+                                       <label for="customermessage">Message for Customer</label>
+                                       <textarea class="form-control" id="customermessage" rows="5"></textarea>
+                                    </div>
+                                    <menu>
+                                       <button value="close">Close</button>
+                                       <button id="sendmessage" value="Send Email">Send Message</button>
+                                    </menu>
+                                 </form> 
+                              </dialog>
+                              <menu>
+                                 <button id="openmodal">Open Modal</button>
+                              </menu>
+                              <output aria-live="polite"></output>
+                        
                            </div>
                         </div>
                         
