@@ -322,7 +322,7 @@ No image or information should be reproduced, transmitted, or copied without the
       }
    </style>
    <script>
-      /*var modal = document.getElementById("myModal");
+      var modal = document.getElementById("myModal");
 
       // Get the button that opens the modal
       var btn = document.getElementById("myBtn");
@@ -345,8 +345,8 @@ No image or information should be reproduced, transmitted, or copied without the
       if (event.target == modal) {
          modal.style.display = "none";
          }
-      }*/
-      $('#myModal').modal(options)
+      }
+      //$('#myModal').modal(options)
    </script>
    <!--smtp email-->
    <script type="text/javascript" src="https://smtpjs.com/v3/smtp.js"></script>
@@ -394,6 +394,8 @@ No image or information should be reproduced, transmitted, or copied without the
       alert("Mail Sent Successfully!")
       });
    }
+
+   $('#testmodal').modal(options)
    </script>
 
    <!--real time tab: style sms and email buttons-->
@@ -2315,7 +2317,7 @@ No image or information should be reproduced, transmitted, or copied without the
                                                 </td>
                                                 <td>
                                                    <div class="realtimebutton">
-                                                      <button type="button" id="myBtn" class="btn btn-primary" data-toggle="modal" data-target="#testModal">Send</button>
+                                                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#testModal">Send</button>
                                                    </div>
                                                 </td>
                                              </tr>
@@ -2395,7 +2397,7 @@ No image or information should be reproduced, transmitted, or copied without the
                                     
                                  </div>
 
-                                 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                 <!--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                       <div class="modal-content">
                                         <div class="modal-header">
@@ -2413,7 +2415,7 @@ No image or information should be reproduced, transmitted, or copied without the
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
+                                  </div>-->
                                  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <h3 style="text-align: center; padding-top: 15px;">Live Map</h3>
                                     <div class="card2" style="height: 700px;">
@@ -2521,16 +2523,16 @@ No image or information should be reproduced, transmitted, or copied without the
                                           <button class="sms"><a href="sms:+15103090802&body=This%20is%20a%20default%20alert%20message." style="color: white;">Send SMS</a></button>
                                        </div>-->
                                     </div>
-                                    <div class="card-deck" style="margin-top: 20px;">
+                                    <div class="card-deck" style="margin-top: 15px;">
                                        <div class="card">
-                                          <select class="form-select" aria-label="Default select example">
+                                          <select class="form-select" style="margin-top: 15px;">
                                              <option selected>Select Outage</option>
                                              <option value="1">Outage 1</option>
                                              <option value="2">Outage 2</option>
                                              <option value="3">Outage 3</option>
                                            </select>
                                        </div>
-                                       <div class="card">
+                                       <div class="card" style="margin-top: 15px;">
                                           <div class="radio">
                                              <label><input type="radio" name="people" checked>Person 1</label>
                                           </div>
@@ -2542,8 +2544,13 @@ No image or information should be reproduced, transmitted, or copied without the
                                           </div>
                                        </div>
                                     </div>
-                                    <div class="card">
-                                       <textarea class="form-control"></textarea>
+                                    <div class="card h-600" style="margin-top: 15px;">
+                                       <form>
+                                          <div class="form-group">
+                                             <label for="customermessage">Message for Customer</label>
+                                             <textarea class="form-control" id="customermessage" rows="5"></textarea>
+                                          </div>
+                                       </form>
                                     </div>
                                  </div>
 
