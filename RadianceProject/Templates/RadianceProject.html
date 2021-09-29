@@ -322,7 +322,7 @@ No image or information should be reproduced, transmitted, or copied without the
       }
    </style>
    <script>
-      var modal = document.getElementById("myModal");
+      /*var modal = document.getElementById("myModal");
 
       // Get the button that opens the modal
       var btn = document.getElementById("myBtn");
@@ -346,7 +346,17 @@ No image or information should be reproduced, transmitted, or copied without the
          modal.style.display = "none";
          }
       }
-      //$('#myModal').modal(options)
+      //$('#myModal').modal(options)*/
+      
+      var openModal = getElementById('openmodal'); 
+      var customerModal = getElementById('customermodal'); 
+      openModal.addEventListener('click', function onOpen() {
+         if (typeof customerModal === "function") {
+            customerModal.showDialog(); 
+         } else {
+            alert("<dialog> API not supported"); 
+         }
+      }); 
    </script>
    <!--smtp email-->
    <script type="text/javascript" src="https://smtpjs.com/v3/smtp.js"></script>
