@@ -320,44 +320,10 @@ No image or information should be reproduced, transmitted, or copied without the
          text-decoration: none;
          cursor: pointer;
       }
+      .modal-backdrop {
+         z-index: -1;
+      }
    </style>
-   <script>
-      /*var modal = document.getElementById("myModal");
-
-      // Get the button that opens the modal
-      var btn = document.getElementById("myBtn");
-
-      // Get the <span> element that closes the modal
-      var span = document.getElementsByClassName("close")[0];
-
-      // When the user clicks the button, open the modal 
-      btn.onclick = function() {
-      modal.style.display = "block";
-      }
-
-      // When the user clicks on <span> (x), close the modal
-      span.onclick = function() {
-      modal.style.display = "none";
-      }
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function(event) {
-      if (event.target == modal) {
-         modal.style.display = "none";
-         }
-      }
-      //$('#myModal').modal(options)*/
-      
-      var openModal = getElementById('openmodal'); 
-      var customerModal = getElementById('customermodal'); 
-      openModal.addEventListener('click', function onOpen() {
-         if (typeof customerModal === "function") {
-            customerModal.showDialog(); 
-         } else {
-            alert("<dialog> API not supported"); 
-         }
-      }); 
-   </script>
    <!--smtp email-->
    <script type="text/javascript" src="https://smtpjs.com/v3/smtp.js"></script>
    <script>
