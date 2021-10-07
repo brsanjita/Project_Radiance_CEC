@@ -529,7 +529,7 @@ No image or information should be reproduced, transmitted, or copied without the
        </div>
      </div>
    </div>
- </div>
+</div>
 
 
 
@@ -2326,9 +2326,10 @@ No image or information should be reproduced, transmitted, or copied without the
                                                    </div>
                                                 </td>
                                                 <td>
-                                                   <div class="realtimebutton">
+                                                   <!--<div class="realtimebutton">
                                                       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#testModal">Send</button>
-                                                   </div>
+                                                   </div>-->
+                                                   <button type="button" class="btn btn-info btn-lg btn-block" data-toggle="modal" data-target="#messageModal" style="margin-top: 5px;">Send</button>
                                                 </td>
                                              </tr>
                                              <tr class="outageinfo">
@@ -2430,6 +2431,30 @@ No image or information should be reproduced, transmitted, or copied without the
                                     <h3 style="text-align: center; padding-top: 15px;">Live Map</h3>
                                     <div class="card2" style="height: 700px;">
                                        <iframe src="https://public.tableau.com/views/RTRMOD/Sheet1?:language=en-US&:display_count=n&:origin=viz_share_link&:showVizHome=no&:embed=true" height="700" width="700"></iframe>
+                                    </div>
+                                 </div>
+
+                                 <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLabel">Virtual Assistant</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                          </button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <div class="input-group">
+                                             <textarea id="virtualText" class="form-control" aria-label="With textarea" placeholder="Enter your query here"></textarea>
+                                          </div>
+                                       
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button id="virtualSubmit" type="button" class="btn btn-primary">Submit</button>
+                                          <button id="virtualClose" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                          <button id="virtualNext" type="button" class="btn btn-primary">Next Question</button>
+                                        </div>
+                                      </div>
                                     </div>
                                  </div>
                                  
