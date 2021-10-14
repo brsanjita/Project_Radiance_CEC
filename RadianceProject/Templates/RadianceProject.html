@@ -358,19 +358,23 @@ No image or information should be reproduced, transmitted, or copied without the
       var operatorTable = document.getElementById('operatoralert'); 
       var operatorCells = operatorTable.rows.item(srNo).cells;
       
-      var outageLocation = operatorCells.item(2); 
-      var affectedCustomers = operatorCells.item(3);
-      var damageInfo = operatorCells.item(4);
-      var status = operatorCells.item(5);
-      var estRestoration = operatorCells.item(6); 
+      var outageLocation = operatorCells.item(1).innerHTML; 
+      var affectedCustomers = operatorCells.item(2).innerHTML;
+      var damageInfo = operatorCells.item(3).innerHTML;
+      var status = operatorCells.item(4).innerHTML.toLowerCase();
+      var estRestoration = operatorCells.item(5).innerHTML; 
 
-      document.getElementById("customermessage").value = `There is an outage at ${outageLocation} with a repair status of ${status}. ${affectedCustomers} are affected. The estimated restoration time is ${estRestoration} hours. Damage information: ${damageInfo}.`
+      document.getElementById("customermessage").value = `There is an outage at ${outageLocation} with a repair status of "${status}". ${affectedCustomers} customers are affected. The estimated restoration time is ${estRestoration} hours. Damage information: ${damageInfo}.`
    }
    </script>
    <script>
-   function sendEmail() {
-
-      var emailBody = document.getElementById("emailpreview").value; 
+   function sendEmail(identifier) {
+      var emailBody; 
+      if (identifier == 0) {
+         var emailBody = document.getElementById("customermessage").value; 
+      } if (identifier == 1) {
+         var emailBody = document.getElementById("fieldcrewmessage").value;
+      }
       Email.send({
          Host: "smtp.gmail.com",
          Username: "outagealert987@gmail.com",
@@ -2284,7 +2288,7 @@ No image or information should be reproduced, transmitted, or copied without the
                                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="col-md-12 d-flex">
                                        <h4 style="text-align: left; padding-top: 15px; padding-left: 15px;">Active Outages: </h4>
-                                       <button type="button" id="outagenumber" class="btn btn-primary btn-lg" style="margin-left: 10px;">5</button>
+                                       <button type="button" id="outagenumber" class="btn btn-primary btn-lg" style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">5</button>
                                     </div>
                                     <div class="card2" style="height: 305px;">
                                        <table id="operatoralert" class="table table-striped table-bordered">
@@ -2424,7 +2428,7 @@ No image or information should be reproduced, transmitted, or copied without the
                                         </div>
                                         <div class="modal-footer">
                                           <button id="virtualClose" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                          <button id="virtualSubmit" type="button" class="btn btn-primary">Send</button>
+                                          <button id="virtualSubmit" type="button" class="btn btn-primary" value="Send Email" onclick="sendEmail(0)">Send</button>
                                         </div>
                                       </div>
                                     </div>
@@ -2567,10 +2571,11 @@ No image or information should be reproduced, transmitted, or copied without the
                                     <div class="card h-600" style="margin-top: 15px;">
                                        <form>
                                           <div class="form-group">
-                                             <label for="customermessage">Message for Customer</label>
-                                             <textarea class="form-control" id="customermessage" rows="5"></textarea>
+                                             <label for="customermessage">Message for Field Crew</label>
+                                             <textarea class="form-control" id="fieldcrewmessage" rows="5"></textarea>
                                           </div>
                                        </form>
+                                       <button id="sendFieldMessage" type="button" class="btn btn-primary btn-xs" value="Send Email" onclick="sendEmail(1)">Send</button>
                                     </div>
                                  </div>
 
