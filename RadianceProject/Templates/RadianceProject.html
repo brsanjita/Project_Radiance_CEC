@@ -170,8 +170,8 @@ No image or information should be reproduced, transmitted, or copied without the
             "paging": false,
             "ordering": false,
             "info": false,
-            "scrollX": true, 
-            scrollX: "100%"
+            //"scrollX": true, 
+           // scrollX: "100%"
          });
          //table.columns.adjust();
          $('#operatoralert').DataTable().draw();
@@ -291,7 +291,7 @@ No image or information should be reproduced, transmitted, or copied without the
          padding-top: 100px; /* Location of the box */
          left: 0;
          top: 0;
-         width: 100%; /* Full width */
+         /*width: 100%; /* Full width */
          height: 100%; /* Full height */
          overflow: auto; /* Enable scroll if needed */
          background-color: rgb(0,0,0); /* Fallback color */
@@ -352,6 +352,20 @@ No image or information should be reproduced, transmitted, or copied without the
       } 
       document.getElementById("emailpreview").value= `Your location is currently experiencing a power outage due to the ${selectedThreat}. The estimated outage duration is ${selectedOutageDuration}. Crews are working to restore power. The estimated restoration period is ${selectedRepairTime}. Thank you for your cooperation. We will keep you updated. `; 
    }
+
+   function messageBody(srNo) {
+      //collect data from operator table
+      var operatorTable = document.getElementById('operatoralert'); 
+      var operatorCells = operatorTable.rows.item(srNo).cells;
+      
+      var outageLocation = operatorCells.item(2); 
+      var affectedCustomers = operatorCells.item(3);
+      var damageInfo = operatorCells.item(4);
+      var status = operatorCells.item(5);
+      var estRestoration = operatorCells.item(6); 
+
+      document.getElementById("customermessage").value = `There is an outage at ${outageLocation} with a repair status of ${status}. ${affectedCustomers} are affected. The estimated restoration time is ${estRestoration} hours. Damage information: ${damageInfo}.`
+   }
    </script>
    <script>
    function sendEmail() {
@@ -376,21 +390,29 @@ No image or information should be reproduced, transmitted, or copied without the
 
    <!--real time tab: style sms and email buttons-->
    <style>
-      .realtimebutton {
+      .realtimebutton-div {
          text-align: center;
          align-items: center;
+      }
+      .realtimebutton {
+         background-color:#075053;
+         color: white; 
+         border-radius: 4px;
+      }
+      .realtimebutton:hover {
+         background-color: #093234;
       }
       #sendemail {
          margin-top: 16px; 
       }
-      .sms {
+      /*.sms {
          background-color: #075053;
          color: white; 
          border-radius: 4px;
       }
       .sms:hover {
          background-color: #093234;
-      }
+      }*/
       .email {
          background-color:#075053;
          color: white; 
@@ -2259,7 +2281,7 @@ No image or information should be reproduced, transmitted, or copied without the
                         <div id="operator-alert" class="tab-pane active">
                            <div class="container-fluid">
                               <div class="row">
-                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="col-md-12 d-flex">
                                        <h4 style="text-align: left; padding-top: 15px; padding-left: 15px;">Active Outages: </h4>
                                        <button type="button" id="outagenumber" class="btn btn-primary btn-lg" style="margin-left: 10px;">5</button>
@@ -2268,7 +2290,7 @@ No image or information should be reproduced, transmitted, or copied without the
                                        <table id="operatoralert" class="table table-striped table-bordered">
                                           <thead>
                                              <tr class="outageinfo">
-                                                <th>Sr. No. 1</th>
+                                                <th>Sr. No.</th>
                                                 <th>Outage Location</th>
                                                 <th>Affected Customers</th>
                                                 <th>Damage Information</th>
@@ -2287,15 +2309,15 @@ No image or information should be reproduced, transmitted, or copied without the
                                                 <td>Under Maintenance</td>
                                                 <td>5</td>
                                                 <td>
-                                                   <div class="realtimebutton"> 
-                                                      <input type="button" class="showmark" value="Show">
+                                                   <div class="realtimebutton-div"> 
+                                                      <input type="button" class="realtimebutton" value="Show">
                                                    </div>
                                                 </td>
                                                 <td>
-                                                   <!--<div class="realtimebutton">
-                                                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#testModal">Send</button>
-                                                   </div>-->
-                                                   <button type="button" class="btn btn-info btn-lg btn-block" data-toggle="modal" data-target="#messageModal" style="margin-top: 5px;">Send</button>
+                                                   <div class="realtimebutton-div">
+                                                      <button type="button" class="realtimebutton" onclick="messageBody(1)" data-toggle="modal" data-target="#messageModal">Preview</button>
+                                                   </div>
+
                                                 </td>
                                              </tr>
                                              <tr class="outageinfo">
@@ -2306,15 +2328,16 @@ No image or information should be reproduced, transmitted, or copied without the
                                                 <td>Replacement Under Progress</td>
                                                 <td>10</td>
                                                 <td>
-                                                   <div class="realtimebutton"> 
-                                                      <input type="button" class="showmark" value="Show">
+                                                   <div class="realtimebutton-div"> 
+                                                      <input type="button" class="realtimebutton" value="Show">
                                                    </div>
                                                 </td>
                                                 <td>
-                                                   <div class="realtimebutton">
-                                                      <form method="post">
-                                                         <input type="button" class="email" value="Send Email" onclick="sendEmail()"/>
-                                                      </form>
+                                                   <div class="realtimebutton-div">
+                                                      <button type="button" class="realtimebutton" onclick="messageBody(2)" data-toggle="modal" data-target="#messageModal">Preview</button>
+                                                      <!--<form method="post">
+                                                         <input type="button" class="realtimebutton" value="Send Email" onclick="sendEmail()"/>
+                                                      </form>-->
                                                    </div>
                                                 </td>
                                              </tr>
@@ -2373,65 +2396,44 @@ No image or information should be reproduced, transmitted, or copied without the
 
                                     
                                  </div>
+                              </div>
 
-                                 <!--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                          </button>
-                                        </div>
-                                        <div class="modal-body">
-                                          ...
-                                        </div>
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                          <button type="button" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>-->
-                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                              <div class="row">
+                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                     <h3 style="text-align: center; padding-top: 15px;">Live Map</h3>
-                                    <div class="card2" style="height: 700px;">
-                                       <iframe src="https://public.tableau.com/views/RTRMOD/Sheet1?:language=en-US&:display_count=n&:origin=viz_share_link&:showVizHome=no&:embed=true" height="700" width="700"></iframe>
+                                    <div class="card2" style="height: 400px;">
+                                       <iframe src="https://public.tableau.com/views/RTRMOD/Sheet1?:language=en-US&:display_count=n&:origin=viz_share_link&:showVizHome=no&:embed=true" style="margin-right: -1000px;" height="400" width="700"></iframe>
                                     </div>
                                  </div>
 
                                  <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                       <!--modal-dialog-centered?-->
                                       <div class="modal-content">
                                         <div class="modal-header">
-                                          <h5 class="modal-title" id="exampleModalLabel">Virtual Assistant</h5>
+                                          <h5 class="modal-title" id="exampleModalLabel">Customer Message</h5>
                                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                           </button>
                                         </div>
                                         <div class="modal-body">
                                           <div class="input-group">
-                                             <textarea id="virtualText" class="form-control" aria-label="With textarea" placeholder="Enter your query here"></textarea>
+                                             <textarea id="customermessage" class="form-control" aria-label="With textarea" rows="5"></textarea>
                                           </div>
                                        
                                         </div>
                                         <div class="modal-footer">
-                                          <button id="virtualSubmit" type="button" class="btn btn-primary">Submit</button>
                                           <button id="virtualClose" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                          <button id="virtualNext" type="button" class="btn btn-primary">Next Question</button>
+                                          <button id="virtualSubmit" type="button" class="btn btn-primary">Send</button>
                                         </div>
                                       </div>
                                     </div>
                                  </div>
                                  
-                                 <!--<div id="customermodal" class="modal">
-                                    <div class="modal-content">
-                                       <span class="close">&times;</span>
-                                       <h3>Customer Alert</h3>
-                                    </div>
-                                 </div>-->
+                                 
                   
                               </div>
+                              <!--
                               <dialog id="customermodal">
                                  <form method="dialog">
                                     <div class="form-group">
@@ -2447,7 +2449,7 @@ No image or information should be reproduced, transmitted, or copied without the
                               <menu>
                                  <button id="openmodal">Open Modal</button>
                               </menu>
-                              <output aria-live="polite"></output>
+                              <output aria-live="polite"></output>-->
                         
                            </div>
                         </div>
@@ -2480,8 +2482,8 @@ No image or information should be reproduced, transmitted, or copied without the
                                                 <td>Line Outage</td>
                                                 <td>5</td>
                                                 <td>
-                                                   <div class="realtimebutton"> 
-                                                      <input type="button" class="showmark" value="Show">
+                                                   <div class="realtimebutton-div"> 
+                                                      <input type="button" class="realtimebutton" value="Show">
                                                    </div>
                                                 </td>
                                              </tr>
